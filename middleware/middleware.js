@@ -93,11 +93,16 @@ const filterDictList = (dictList) => {
   });
 
   // filter duplicate movie titles
-  // let uniqueByTitle = _.uniqBy(dictList, 'original_title');
+  const filteredList = dictList.reduce((acc, current) => {
+    const x = acc.find(item => item.original_title === current.original_title);
+    if (!x) {
+      return acc.concat([current]);
+    } else {
+      return acc;
+    }
+  }, []);
 
-  // return uniqueByTitle;
-
-  return dictList;
+  return filteredList;
 }
 
 const getPersonMovies = async (name, personType, numMovies=5) => {
@@ -111,8 +116,8 @@ const getPersonMovies = async (name, personType, numMovies=5) => {
   // get movies
   let worksData = await getRequestMovieDB(`/person/${personId}/combined_credits?api_key=${MOVIEDB_API_KEY}`);
   let sortedListByPopularity;
-  // let sortedListByReleaseDate;
-  // let timelineList;
+  let sortedListByReleaseDate;
+  let timelineList;
   
   if (personType == 'producer') {
     let crewList = worksData['crew'];
@@ -124,10 +129,10 @@ const getPersonMovies = async (name, personType, numMovies=5) => {
     });
 
     // sort list by release date (ascending) and choose 10 evenly spaced movies
-    // sortedListByReleaseDate = crewList.sort(function(first, second) {
-    //   return Date.parse(first.release_date) - Date.parse(second.release_date);
-    // });
-    // timelineList = distributedCopy(sortedListByReleaseDate, 10);
+    sortedListByReleaseDate = crewList.sort(function(first, second) {
+      return Date.parse(first.release_date) - Date.parse(second.release_date);
+    });
+    timelineList = distributedCopy(sortedListByReleaseDate, 10);
 
   } else if (personType == 'actor') {
     let castList = worksData['cast'];
@@ -137,10 +142,10 @@ const getPersonMovies = async (name, personType, numMovies=5) => {
       return second.popularity - first.popularity;
     });
 
-    // sortedListByReleaseDate = castList.sort(function(first, second) {
-    //   return Date.parse(first.release_date) - Date.parse(second.release_date);
-    // });
-    // timelineList = distributedCopy(sortedListByReleaseDate, 10);
+    sortedListByReleaseDate = castList.sort(function(first, second) {
+      return Date.parse(first.release_date) - Date.parse(second.release_date);
+    });
+    timelineList = distributedCopy(sortedListByReleaseDate, 10);
   }
 
   // populate list with most popular movies
@@ -160,21 +165,21 @@ const getPersonMovies = async (name, personType, numMovies=5) => {
   }
 
   // populate list with 10 evenly spaced movies by release date
-  // for (let j = 0; j < 10; j++) {
-  //   let currSelection = timelineList[j];
-  //   let currData = {};
+  for (let j = 0; j < 10; j++) {
+    let currSelection = timelineList[j];
+    let currData = {};
 
-  //   currData['title'] = currSelection['original_title'];
-  //   currData['id'] = currSelection['id'];
-  //   currData['poster'] = `https://image.tmdb.org/t/p/original/${currSelection['poster_path']}`;
-  //   currData['backdrop'] = `https://image.tmdb.org/t/p/original/${currSelection['backdrop_path']}`;
-  //   currData['overview'] = currSelection['overview'];
-  //   currData['date'] = currSelection['release_date'];
-  //   currData['timeline'] = true;
+    currData['title'] = currSelection['original_title'];
+    currData['id'] = currSelection['id'];
+    currData['poster'] = `https://image.tmdb.org/t/p/original/${currSelection['poster_path']}`;
+    currData['backdrop'] = `https://image.tmdb.org/t/p/original/${currSelection['backdrop_path']}`;
+    currData['overview'] = currSelection['overview'];
+    currData['date'] = currSelection['release_date'];
+    currData['timeline'] = true;
 
-  //   console.log(currData);
-  //   result.push(currData);
-  // }
+    console.log(currData);
+    result.push(currData);
+  }
 
   return result;
 }

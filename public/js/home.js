@@ -34,7 +34,11 @@ $(document).ready(() => {
 
     let plot = $('#color-plot');
 
-    for (let i = 0; i <= 5; i++) {
+    for (let i = 0; i <= 15; i++) {
+      if (i > 5 && $('#type').text() == 'movie') {
+        break;
+      }
+
       let palette = $(`#palette-${i}`);
       let image = $(`#movie-${i}-poster`)[0];
 
@@ -56,25 +60,28 @@ $(document).ready(() => {
             return palette;
           }, palette);
 
-          // add dominant color to color plot
-          let dColor = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
-          let dContainer = document.createElement('div');
-          let dSwatch = document.createElement('div');
-          let dYear = document.createElement('p');
+          // add swatch to color timeline plot
+          if (i > 5) {
+            // add dominant color to color plot
+            let dColor = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
+            let dContainer = document.createElement('div');
+            let dSwatch = document.createElement('div');
+            let dYear = document.createElement('p');
 
-          dSwatch.style.setProperty('--color', dColor);
-          dSwatch.setAttribute('color', dColor);
-          dSwatch.classList.add('plot-swatch');
+            dSwatch.style.setProperty('--color', dColor);
+            dSwatch.setAttribute('color', dColor);
+            dSwatch.classList.add('plot-swatch');
 
-          dContainer.classList.add('plot-swatch-container');
+            dContainer.classList.add('plot-swatch-container');
 
-          let year = $(`#movie-${i}-date`).text().substring(0,4);
-          dYear.innerText = year;
+            let year = $(`#movie-${i}-date`).text().substring(0,4);
+            dYear.innerText = year;
 
-          dContainer.append(dSwatch);
-          dContainer.append(dYear);
-          plot.append(dContainer);
-    
+            dContainer.append(dSwatch);
+            dContainer.append(dYear);
+            plot.append(dContainer);
+          }
+
           // hide poster
           $(`#movie-${i}-poster`).css({'display': 'none'});
         }, 2000);
