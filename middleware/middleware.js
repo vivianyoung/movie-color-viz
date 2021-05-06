@@ -1,8 +1,21 @@
+'use strict';
+
 const axios = require('axios');
 
-MOVIEDB_API_URL = 'https://api.themoviedb.org/3'
-MOVIEDB_API_KEY = '8bab42520fb79424d47245ab1e5406cf'
-OMDB_API_KEY = 'e6dd17dc'
+const MOVIEDB_API_URL = 'https://api.themoviedb.org/3';
+const MOVIEDB_API_KEY = '8bab42520fb79424d47245ab1e5406cf';
+const OMDB_API_KEY = 'e6dd17dc';
+
+const distributedCopy = (items, n) => {
+  var elements = [items[0]];
+  var totalItems = items.length - 2;
+  var interval = Math.floor(totalItems/(n - 2));
+  for (var i = 1; i < n - 1; i++) {
+      elements.push(items[i * interval]);
+  }
+  elements.push(items[items.length - 1]);
+  return elements;
+}
 
 const getRequestMovieDB = async (queryUrl) => {
   let result = null;
@@ -73,6 +86,20 @@ const getRecommendedMovies = async (movieName, numRecs=5) => {
   return result;
 }
 
+const filterDictList = (dictList) => {
+  // filter out tv shows
+  dictList = dictList.filter(function(e) {
+    return e.media_type && e.media_type == 'movie';
+  });
+
+  // filter duplicate movie titles
+  // let uniqueByTitle = _.uniqBy(dictList, 'original_title');
+
+  // return uniqueByTitle;
+
+  return dictList;
+}
+
 const getPersonMovies = async (name, personType, numMovies=5) => {
   let result = [];
   result['type'] = personType;
@@ -83,36 +110,42 @@ const getPersonMovies = async (name, personType, numMovies=5) => {
 
   // get movies
   let worksData = await getRequestMovieDB(`/person/${personId}/combined_credits?api_key=${MOVIEDB_API_KEY}`);
-  let sortedList;
+  let sortedListByPopularity;
+  // let sortedListByReleaseDate;
+  // let timelineList;
   
   if (personType == 'producer') {
     let crewList = worksData['crew'];
+    crewList = filterDictList(crewList);
 
-    // filter out tv shows
-    crewList = crewList.filter(function(e) {
-      return e.media_type && e.media_type == 'movie';
-    });
-
-    // sort list by popularity
-    sortedList = crewList.sort(function(first, second) {
+    // sort list by popularity (descending)
+    sortedListByPopularity = crewList.sort(function(first, second) {
       return second.popularity - first.popularity;
     });
+
+    // sort list by release date (ascending) and choose 10 evenly spaced movies
+    // sortedListByReleaseDate = crewList.sort(function(first, second) {
+    //   return Date.parse(first.release_date) - Date.parse(second.release_date);
+    // });
+    // timelineList = distributedCopy(sortedListByReleaseDate, 10);
+
   } else if (personType == 'actor') {
     let castList = worksData['cast'];
+    castList = filterDictList(castList);
 
-    // filter out tv shows
-    castList = castList.filter(function(e) {
-      return e.media_type && e.media_type == 'movie';
-    });
-
-    sortedList = castList.sort(function(first, second) {
+    sortedListByPopularity = castList.sort(function(first, second) {
       return second.popularity - first.popularity;
     });
+
+    // sortedListByReleaseDate = castList.sort(function(first, second) {
+    //   return Date.parse(first.release_date) - Date.parse(second.release_date);
+    // });
+    // timelineList = distributedCopy(sortedListByReleaseDate, 10);
   }
 
-  // populate result list
+  // populate list with most popular movies
   for (let i = 0; i < numMovies; i++) {
-    let currMovieData = sortedList[i];
+    let currMovieData = sortedListByPopularity[i];
     let data = {};
 
     data['title'] = currMovieData['original_title'];
@@ -121,9 +154,27 @@ const getPersonMovies = async (name, personType, numMovies=5) => {
     data['backdrop'] = `https://image.tmdb.org/t/p/original/${currMovieData['backdrop_path']}`;
     data['overview'] = currMovieData['overview'];
     data['date'] = currMovieData['release_date'];
+    data['timeline'] = false;
 
     result.push(data);
   }
+
+  // populate list with 10 evenly spaced movies by release date
+  // for (let j = 0; j < 10; j++) {
+  //   let currSelection = timelineList[j];
+  //   let currData = {};
+
+  //   currData['title'] = currSelection['original_title'];
+  //   currData['id'] = currSelection['id'];
+  //   currData['poster'] = `https://image.tmdb.org/t/p/original/${currSelection['poster_path']}`;
+  //   currData['backdrop'] = `https://image.tmdb.org/t/p/original/${currSelection['backdrop_path']}`;
+  //   currData['overview'] = currSelection['overview'];
+  //   currData['date'] = currSelection['release_date'];
+  //   currData['timeline'] = true;
+
+  //   console.log(currData);
+  //   result.push(currData);
+  // }
 
   return result;
 }

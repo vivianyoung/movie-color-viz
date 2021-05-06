@@ -32,16 +32,22 @@ $(document).ready(() => {
       'color': 'black'
     });
 
+    let plot = $('#color-plot');
+
     for (let i = 0; i <= 5; i++) {
       let palette = $(`#palette-${i}`);
       let image = $(`#movie-${i}-poster`)[0];
 
       try {
         setTimeout(() => {
-          let colors = colorThief.getPalette(image, swatches);
-          console.log(colors);
+          let dominantColor = colorThief.getColor(image);
+          let paletteColors = colorThief.getPalette(image, swatches);
+          console.log(paletteColors);
+          console.log(dominantColor);
+
+          // add colors to palette
           while (palette.firstChild) palette.removeChild(palette.firstChild);
-          colors.reduce( (palette,rgb) => {
+          paletteColors.reduce( (palette,rgb) => {
             let color = `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;        
             let swatch = document.createElement('div');
             swatch.style.setProperty('--color', color);
@@ -49,6 +55,25 @@ $(document).ready(() => {
             palette.append(swatch);
             return palette;
           }, palette);
+
+          // add dominant color to color plot
+          let dColor = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
+          let dContainer = document.createElement('div');
+          let dSwatch = document.createElement('div');
+          let dYear = document.createElement('p');
+
+          dSwatch.style.setProperty('--color', dColor);
+          dSwatch.setAttribute('color', dColor);
+          dSwatch.classList.add('plot-swatch');
+
+          dContainer.classList.add('plot-swatch-container');
+
+          let year = $(`#movie-${i}-date`).text().substring(0,4);
+          dYear.innerText = year;
+
+          dContainer.append(dSwatch);
+          dContainer.append(dYear);
+          plot.append(dContainer);
     
           // hide poster
           $(`#movie-${i}-poster`).css({'display': 'none'});
@@ -70,8 +95,12 @@ $(document).ready(() => {
       }
     }
 
+    // viz type is producer or actor
     if ($('#type').text() != "movie") {
-      $('#card-0').addClass('hidden');
+      $('#card-0').css({'display': 'none'}); // hide original movie palette card
+      $('.color-plot-div').removeClass('hidden');
+    } else {
+      $('.color-plot-div').css({'display': 'none'}); // hide color time plot
     }
   }
 
