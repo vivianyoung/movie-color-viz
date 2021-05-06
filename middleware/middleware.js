@@ -39,8 +39,8 @@ const getRecommendedMovies = async (movieName, numRecs=5) => {
 
   let movieData = await getMovieApiData(movieName);
   
-  let queryUrl = `/movie/${movieData["id"]}/similar?api_key=${MOVIEDB_API_KEY}`;
-  let recData = await getRequestMovieDB(queryUrl);
+  let recQueryUrl = `/movie/${movieData["id"]}/similar?api_key=${MOVIEDB_API_KEY}`;
+  let recData = await getRequestMovieDB(recQueryUrl);
 
   for (let i = 0; i < numRecs; i++) {
     let currRecData = recData['results'][i];
@@ -55,6 +55,20 @@ const getRecommendedMovies = async (movieName, numRecs=5) => {
 
     result.push(data);
   }
+
+  // add current movie
+  let queryUrl = `/movie/${movieData["id"]}?api_key=${MOVIEDB_API_KEY}`;
+  let queryData = await getRequestMovieDB(queryUrl);
+  let originalData = {};
+
+  originalData['title'] = queryData['original_title'];
+  originalData['id'] = queryData['id'];
+  originalData['poster'] = `https://image.tmdb.org/t/p/original/${queryData['poster_path']}`;
+  originalData['backdrop'] = `https://image.tmdb.org/t/p/original/${queryData['backdrop_path']}`;
+  originalData['overview'] = queryData['overview'];
+  originalData['date'] = queryData['release_date'];
+
+  result.push(originalData);
 
   return result;
 }

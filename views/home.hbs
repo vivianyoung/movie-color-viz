@@ -21,12 +21,11 @@
     <div class="content">
 
       <div class="top">
-        <h2>colors in movies visualizer</h1>
-        <h4>search for a movie title to find recommendations or search for a producer to visualize the color palettes in their work.</h4>
+        <h3>colors in movies visualizer</h3>
+        <p>search for a movie title to find recommendations or search for a producer / actor to visualize the color palettes in their work.</p>
         <br><br>
         
         <form method="post" id="form" action="/">
-          {{!-- {% csrf_token %} --}}
           <label for="textinput">
             search for:
           </label>
@@ -54,8 +53,17 @@
         
       </div>
       <div id="results-div">
-        <p id="results-header">{{ text }}</p>
+        <p id="results-header">{{ input }} {{ text }}</p>
         <br><br>
+
+        <div class="card" id="card-0">
+          <div class="card-left">
+            <div class="palette" id="palette-0"></div>
+          </div>
+          <div class="card-right">
+            <p id="movie-0-title">{{originalMovie.title}}</p>
+          </div>
+        </div>
 
         <div class="card">
           <div class="card-left">
@@ -104,6 +112,15 @@
       </div>
 
       <div id="hidden-results-div">
+        <p id="type">{{ type }}</p>
+        <div id="movie-0">
+          <p id="movie-0-title">{{originalMovie.title}}</p>
+          <img id="movie-0-poster" src="{{originalMovie.poster}}" crossorigin="anonymous">
+          <img id="movie-0-backdrop" src="{{originalMovie.backdrop}}" crossorigin="anonymous">
+          <p id="movie-0-overview">{{originalMovie.overview}}</p>
+          <p id="movie-0-date">{{originalMovie.date}}</p>
+        </div>
+
         <div id="movie-1">
           <p id="movie-1-title">{{movie1.title}}</p>
           <img id="movie-1-poster" src="{{movie1.poster}}" crossorigin="anonymous">

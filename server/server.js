@@ -31,7 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
-  res.render('home', {});
+  res.render('home', {text: ''});
 })
 
 app.post('/', async function (req, res){
@@ -46,17 +46,18 @@ app.post('/', async function (req, res){
         let recData = await middleware.getRecommendedMovies(req.body.textinput, num);
         data = recData;
         text = "similar movies:";
+        console.log('similar movies:', recData);
         break;
       case 'producer':
         let producerMovieData = await middleware.getPersonMovies(req.body.textinput, 'producer', num);
         data = producerMovieData;
-        text = "top five movies:";
+        text = "top movies:";
         console.log('producer data:', producerMovieData);
         break;
       case 'actor':
         let actorMovieData = await middleware.getPersonMovies(req.body.textinput, 'actor', num);
         data = actorMovieData;
-        text = "top five movies:";
+        text = "top movies:";
         console.log('actor data:', actorMovieData);
         break;
     }
@@ -64,21 +65,36 @@ app.post('/', async function (req, res){
     res.status(404).send();
   }
 
-  // res.render('home', {data: JSON.strigify(data)});
-
   let movieOne = data[0];
   let movieTwo = data[1];
   let movieThree = data[2];
   let movieFour = data[3];
   let movieFive = data[4];
 
-  res.render('home', {
-    text: text,
-    movie1: movieOne,
-    movie2: movieTwo,
-    movie3: movieThree,
-    movie4: movieFour,
-    movie5: movieFive,
-  });
+  if (req.body.viztype == 'movie') {
+    let originalMovie = data[5];
+    res.render('home', {
+      originalMovie: originalMovie,
+      text: text,
+      type: req.body.viztype,
+      input: req.body.textinput,
+      movie1: movieOne,
+      movie2: movieTwo,
+      movie3: movieThree,
+      movie4: movieFour,
+      movie5: movieFive,
+    });
+  } else {
+    res.render('home', {
+      text: text,
+      type: req.body.viztype,
+      input: req.body.textinput,
+      movie1: movieOne,
+      movie2: movieTwo,
+      movie3: movieThree,
+      movie4: movieFour,
+      movie5: movieFive,
+    });
+  }
 
 });
