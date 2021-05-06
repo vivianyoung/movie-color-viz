@@ -1,0 +1,120 @@
+body, html {
+  margin:0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  overflow: hidden;
+  background-color: black;
+  color: white;
+  font-family: 'Andale Mono', sans-serif;
+  font-size: 12px;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  min-width: 100vw;
+	min-height: 100vh;
+	overflow-x: hidden;
+	position: relative;
+  text-transform: lowercase;
+  background-color: inherit;
+  color: inherit;
+}
+
+.content {
+  width: 60%;
+  margin: 5% 20%;
+  height: auto;
+}
+
+.top {
+  height: 30vh;
+  width: 100%;
+}
+
+.message-div {
+  margin-top: 50px;
+  display:none;
+}
+
+#message-text {
+  background-color: white;
+  color: black;
+  padding: 5px 10px;
+}
+
+#canvas {
+  width: 100%;
+}
+
+#submit-button {
+  margin-top: 20px;
+}
+
+#hidden-results-div {
+  display:none;
+}
+
+.palette {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.palette > div { 
+  min-width: 20px; 
+  min-height: 20px;
+  width: 8%;
+  height: 100%;
+  background-color: var(--color);
+  margin: 2px;
+  &::after {
+      content: attr(color);
+      font-family: monospace;
+      margin-left: 25px;
+      white-space: nowrap;
+  }
+}
+
+#results-div {
+  display:none;
+}
+
+.card {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 20px;
+}
+
+.card-left {
+  margin:0!important;
+  width: 70%;
+  height: inherit;
+  float:left;
+  display: flex;
+  align-items: center;
+}
+
+.card-right {
+  margin:0!important;
+  width: 30%;
+  height: inherit;
+  float:right;
+  overflow-x: visible;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.hidden {
+  display:none;
+}
+
+#movie-poster {
+  width:30%;
+}

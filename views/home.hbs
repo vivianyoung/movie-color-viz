@@ -1,0 +1,155 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>movie recommendation visualizer</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.dom.min.js"></script>
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="content">
+
+      <div class="top">
+        <h2>colors in movies visualizer</h1>
+        <h4>search for a movie title to find recommendations or search for a producer to visualize the color palettes in their work.</h4>
+        <br><br>
+        
+        <form method="post" id="form" action="/">
+          {{!-- {% csrf_token %} --}}
+          <label for="textinput">
+            search for:
+          </label>
+          <input type="text" value="" name="textinput">
+          <br><br>
+          <label for="viztype">visualization type:</label>
+          <select name="viztype" id="viztype">
+            <option value="movie">movie</option>
+            <option value="producer">producer</option>
+            <option value="actor">actor</option>
+          </select>
+          <br><br>
+          <button type="submit" id="submit-button">submit</button>
+        </form>
+
+      </div>
+
+      <div class="message-div">
+        <p id="message-text"></p>
+      </div>
+
+      <div id="canvas"></div>
+
+      <div id="search-palette-div">
+        
+      </div>
+      <div id="results-div">
+        <p id="results-header">{{ text }}</p>
+        <br><br>
+
+        <div class="card">
+          <div class="card-left">
+            <div class="palette" id="palette-1"></div>
+          </div>
+          <div class="card-right">
+            <p id="movie-1-title">{{movie1.title}}</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-left">
+            <div class="palette" id="palette-2"></div>
+          </div>
+          <div class="card-right">
+            <p id="movie-2-title">{{movie2.title}}</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-left">
+            <div class="palette" id="palette-3"></div>
+          </div>
+          <div class="card-right">
+            <p id="movie-3-title">{{movie3.title}}</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-left">
+            <div class="palette" id="palette-4"></div>
+          </div>
+          <div class="card-right">
+            <p id="movie-4-title">{{movie4.title}}</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-left">
+            <div class="palette" id="palette-5"></div>
+          </div>
+          <div class="card-right">
+            <p id="movie-5-title">{{movie5.title}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="hidden-results-div">
+        <div id="movie-1">
+          <p id="movie-1-title">{{movie1.title}}</p>
+          <img id="movie-1-poster" src="{{movie1.poster}}" crossorigin="anonymous">
+          <img id="movie-1-backdrop" src="{{movie1.backdrop}}" crossorigin="anonymous">
+          <p id="movie-1-overview">{{movie1.overview}}</p>
+          <p id="movie-1-date">{{movie1.date}}</p>
+        </div>
+
+        <div id="movie-2">
+          <p id="movie-2-title">{{movie2.title}}</p>
+          <img id="movie-2-poster" src="{{movie2.poster}}" crossorigin="anonymous">
+          <img id="movie-2-backdrop" src="{{movie2.backdrop}}" crossorigin="anonymous">
+          <p id="movie-2-overview">{{movie2.overview}}</p>
+          <p id="movie-2-date">{{movie2.date}}</p>
+        </div>
+        
+        <div id="movie-3">
+          <p id="movie-3-title">{{movie3.title}}</p>
+          <img id="movie-3-poster" src="{{movie3.poster}}" crossorigin="anonymous">
+          <img id="movie-3-backdrop" src="{{movie3.backdrop}}" crossorigin="anonymous">
+          <p id="movie-3-overview">{{movie3.overview}}</p>
+          <p id="movie-3-date">{{movie3.date}}</p>
+        </div>
+        
+        <div id="movie-4">
+          <p id="movie-4-title">{{movie4.title}}</p>
+          <img id="movie-4-poster" src="{{movie4.poster}}" crossorigin="anonymous">
+          <img id="movie-4-backdrop" src="{{movie4.backdrop}}" crossorigin="anonymous">
+          <p id="movie-4-overview">{{movie4.overview}}</p>
+          <p id="movie-4-date">{{movie4.date}}</p>
+        </div>
+
+        <div id="movie-5">
+          <p id="movie-5-title">{{movie5.title}}</p>
+          <img id="movie-5-poster" src="{{movie5.poster}}" crossorigin="anonymous">
+          <img id="movie-5-backdrop" src="{{movie5.backdrop}}" crossorigin="anonymous">
+          <p id="movie-5-overview">{{movie5.overview}}</p>
+          <p id="movie-5-date">{{movie5.date}}</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/home.js"></script>
+</body>
+
+</html>
