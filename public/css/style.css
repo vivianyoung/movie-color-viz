@@ -139,7 +139,7 @@ body, html {
 }
 
 #color-plot {
-  background-color: white;
+  background-color: #BCDC90;
   color: black;
   display: flex;
   flex-direction: row;
@@ -184,4 +184,8 @@ body, html {
   align-self: center;
   justify-self: center;
   text-align: center;
+}
+
+.error {
+  color: red;
 }

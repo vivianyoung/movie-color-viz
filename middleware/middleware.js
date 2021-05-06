@@ -91,7 +91,7 @@ const filterDictList = (dictList) => {
   dictList = dictList.filter(function(e) {
     return (e.media_type != null && e.media_type == 'movie') && (e.release_date == null || e.release_date != '');
   });
-  
+
   // filter duplicate movie titles
   const filteredList = dictList.reduce((acc, current) => {
     const x = acc.find(item => item.original_title === current.original_title);
@@ -113,6 +113,8 @@ const getPersonMovies = async (name, personType, numMovies=5) => {
   // first, get person id
   let searchData = await getRequestMovieDB(`/search/person?api_key=${MOVIEDB_API_KEY}&query=${name}`);
   let personId = searchData['results'][0]['id'];
+  let personName = searchData['results'][0]['name'];
+  console.log(searchData['results'][0]['known_for']);
 
   // get movies
   let worksData = await getRequestMovieDB(`/person/${personId}/combined_credits?api_key=${MOVIEDB_API_KEY}`);
@@ -184,10 +186,11 @@ const getPersonMovies = async (name, personType, numMovies=5) => {
     result.push(currData);
   }
 
+  console.log(personName);
+  result.push(personName);
+
   return result;
 }
-
-
 
 module.exports = {
   getRecommendedMovies,
