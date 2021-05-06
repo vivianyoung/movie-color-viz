@@ -90,14 +90,14 @@ $(document).ready(() => {
           }
           // hide poster
           $(`#movie-${i}-poster`).css({'display': 'none'});
-        }, 3000);
+        }, 5000);
 
         setTimeout(() => {
           // show results div
           $('#results-div').css({'display': 'block'});
           $('.message-div').css({'display': 'none'});
 
-        }, 3200);
+        }, 5100);
     
       } catch (err) {
         console.log(err);
