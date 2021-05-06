@@ -44,7 +44,7 @@ app.post('/', async function (req, res){
     switch(req.body.viztype) {
       case 'movie':
         data = await middleware.getRecommendedMovies(req.body.textinput, num);
-        text = "similar movies:";
+        text = "recommended movies:";
         // console.log('similar movies:', data);
         break;
       case 'producer':
