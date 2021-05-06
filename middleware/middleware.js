@@ -87,11 +87,11 @@ const getRecommendedMovies = async (movieName, numRecs=5) => {
 }
 
 const filterDictList = (dictList) => {
-  // filter out tv shows
+  // filter out tv shows and movies without dates
   dictList = dictList.filter(function(e) {
-    return e.media_type && e.media_type == 'movie';
+    return (e.media_type != null && e.media_type == 'movie') && (e.release_date == null || e.release_date != '');
   });
-
+  
   // filter duplicate movie titles
   const filteredList = dictList.reduce((acc, current) => {
     const x = acc.find(item => item.original_title === current.original_title);
@@ -102,6 +102,7 @@ const filterDictList = (dictList) => {
     }
   }, []);
 
+  // console.log(filteredList);
   return filteredList;
 }
 
@@ -147,6 +148,8 @@ const getPersonMovies = async (name, personType, numMovies=5) => {
     });
     timelineList = distributedCopy(sortedListByReleaseDate, 10);
   }
+
+  console.log(timelineList);
 
   // populate list with most popular movies
   for (let i = 0; i < numMovies; i++) {

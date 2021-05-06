@@ -129,7 +129,6 @@ body, html {
 .color-plot-div {
   width: 100%;
   height: auto;
-  background-color: white;
   padding: 10px 20px;
   margin-top: 75px;
   margin-bottom: 150px;
@@ -137,10 +136,11 @@ body, html {
   flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
-  color: black;
 }
 
 #color-plot {
+  background-color: white;
+  color: black;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -148,6 +148,8 @@ body, html {
   align-items: center;
   width: 100%;
   margin-top: 30px;
+  padding-top:30px;
+  padding-bottom: 20px;
 }
 
 #plot-title {
@@ -160,7 +162,7 @@ body, html {
   background-color: var(--color);
   margin: 2px;
   align-self: center;
-  border-radius: 50px;
+  /* border-radius: 50px; */
   &::after {
       content: attr(color);
       font-family: monospace;

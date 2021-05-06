@@ -45,17 +45,17 @@ app.post('/', async function (req, res){
       case 'movie':
         data = await middleware.getRecommendedMovies(req.body.textinput, num);
         text = "similar movies:";
-        console.log('similar movies:', data);
+        // console.log('similar movies:', data);
         break;
       case 'producer':
         data = await middleware.getPersonMovies(req.body.textinput, 'producer', num);
         text = "top movies:";
-        console.log('producer data:', data);
+        // console.log('producer data:', data);
         break;
       case 'actor':
         data = await middleware.getPersonMovies(req.body.textinput, 'actor', num);
         text = "top movies:";
-        console.log('actor data:', data);
+        // console.log('actor data:', data);
         break;
     }
   } catch (e) {
