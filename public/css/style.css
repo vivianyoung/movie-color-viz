@@ -118,6 +118,10 @@ body, html {
   color: black;
 }
 
+#title {
+  color: #BCDC90!important;
+}
+
 .hidden {
   display:none!important;
 }
